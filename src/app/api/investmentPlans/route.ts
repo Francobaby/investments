@@ -169,6 +169,7 @@ export async function POST(req: Request) {
 }
 
 // ✅ Fetch user investments
+//NEW Frontend Should call this api so that investment plans can shown in the front end
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);

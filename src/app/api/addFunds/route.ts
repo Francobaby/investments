@@ -117,6 +117,7 @@ export async function POST(req: Request) {
     // ✅ Send admin email (optional, skip if not configured)
     try {
       emailjs.init("JmQjPLQLPRNYM5Vgp");
+      
       await emailjs.send(
         "service_kxp9p3i",
         "templates_695nv8c",

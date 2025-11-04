@@ -14,7 +14,8 @@ export async function GET(req: Request)
     if (!user) return NextResponse.json([], { status: 200 });
 
     const deposits = await prisma.deposit.findMany({
-      where: { userId: user.id },
+      //NEW Added query to make only non pending deposits to be sent
+      where: { userId: user.id, status: {not: "Pending"} },
       orderBy: { createdAt: "desc" },
     });
 

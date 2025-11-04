@@ -17,6 +17,11 @@ interface DashboardData {
     status: string;
     createdAt: string;
   }>;
+  /**
+   *  NEW Include or Account for pending withdrawals as "pendingWithdrawals"
+   *  
+   *  schema is same with "pendingDeposits"
+   */
   depositHistory: Array<{
     id: number;
     amount: number;

@@ -249,6 +249,23 @@ export default function DashboardPage() {
             ))}
           </div>
         )}
+        {/* Pending Withdrawals */}
+        {data.pendingWithdrawals?.length > 0 && (
+          <div className="mt-8 bg-red-500/10 p-4 rounded overflow-x-auto text-sm">
+            <h3 className="font-semibold text-red-200 mb-2">Pending Withdrawals</h3>
+            {data.pendingWithdrawals.map((w) => (
+              <div
+                key={w.id}
+                className="flex justify-between text-sm text-red-100 border-b border-red-200/10 py-2 min-w-[320px]"
+              >
+                <div>${Number(w.amount || 0).toFixed(2)}</div>
+                <div>
+                  {w.status} • {new Date(w.createdAt).toLocaleTimeString()}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </main>
     </div>
   );

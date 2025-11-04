@@ -36,14 +36,20 @@ export async function GET(req: Request) {
     const user = await prisma.user.findUnique({ where: { email: userEmail } });
     if (!user) return NextResponse.json(getDefaultStats());
 
-    const [deposits, investments, transactions] = await Promise.all([
+    const [deposits, investments, transactions, withdrawals] = await Promise.all([
       prisma.deposit.findMany({ where: { userId: user.id }, orderBy: { createdAt: "desc" } }),
       prisma.investment.findMany({ where: { userId: user.id }, orderBy: { createdAt: "desc" } }),
       prisma.transaction.findMany({ where: { userId: user.id }, orderBy: { createdAt: "desc" } }),
+  
+      // NEW Adding pending withdrawals to dashboard data
+      prisma.withdrawal.findMany({where: {userId: user.id}, orderBy: {createdAt: 'desc'}})
     ]);
 
     const pendingDeposits = deposits.filter((d) => d.status === "Pending");
     const depositHistory = deposits.filter((d) => d.status !== "Pending");
+
+    // NEW Filtering withdrawals for pending to dashboard data
+    const pendingWithdrawals = withdrawals.filter((w) => w.status == "Pending");
 
     // -----------------------------
     // 📊 Build Monthly Chart
@@ -87,6 +93,8 @@ export async function GET(req: Request) {
         roiRedeemed: user.redeemedRoi || 0,
       },
       pendingDeposits,
+      // NEW added "pendingWithdrawals" to DashboardData
+      pendingWithdrawals,
       depositHistory,
       monthlyData,
     };

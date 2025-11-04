@@ -28,7 +28,7 @@ export async function GET(req: Request) {
     }
 
     // Validate ID
-    const id = parseInt(transactionId || depositId);
+    const id = parseInt(String(transactionId || depositId));
     if (isNaN(id)) {
       return NextResponse.json(
         { success: false, message: "Invalid transaction or deposit ID" },

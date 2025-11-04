@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { sendWithdrawalRequestEmail } from "@/lib/email";
 import { v4 as uuidv4 } from "uuid";
+import { notDeepEqual } from "node:assert";
 
 export const runtime = "nodejs";
 
@@ -19,7 +20,8 @@ export async function GET(req: Request) {
     const userId = searchParams.get("userId");
 
     const withdrawals = await prisma.withdrawal.findMany({
-      where: userId ? { userId: Number(userId) } : {},
+      // NEW Made sure only rejected or approved withdrawals pass through
+      where: userId ? { userId: Number(userId), status: {not: "Pending"}} : {},
       include: {
         user: { select: { id: true, email: true, username: true } },
       },
